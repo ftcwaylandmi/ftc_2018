@@ -79,37 +79,28 @@ public class Crater_Check extends LinearOpMode {
             while (robot.IsBusy()) {
                 telemetry.addData("Running", "Drop Robot");
             }
-            telemetry.addData("Finished", "Drop Robot");
-            telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-            telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
+        robot.DriveByTime(2400);
+        while (robot.IsBusy2()) {
+            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+        }
+        telemetry.addData("Done Moving","Complete");
+        sleep(100);
+        robot.DriveByLeftTime(1300);
 
-            robot.DriveForwardWithEncoder(8000);
-            while (robot.IsBusy()) {
-                telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-                telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
-                telemetry.addData("Running", "Driving");
-            }
-            robot.DriveLeftWithEncoder(3000);
-
-        while (robot.IsBusy()) {
-            telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-            telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
+        while (robot.IsBusy2()) {
             telemetry.addData("Running", "Driving");
         }
-            robot.DriveForwardWithEncoder(8000);
-        while (robot.IsBusy()) {
-            telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-            telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
+        sleep(100);
+        robot.DriveByTime(1800);
+        while (robot.IsBusy2()) {
             telemetry.addData("Running", "Driving");
         }
-            robot.DropMarker();
-            robot.DriveLeftWithEncoder(10000);
-
-            telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-            telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
-
-
-            /*
+        sleep(100);
+        telemetry.addData("Dropping Marker", "Driving");
+        robot.DropMarker();
+        sleep(100);
+        robot.DriveByRightTime(2100);
+        /*
             if (robot.DetectBall()) {
                 // run it over.
                 // go to collect point

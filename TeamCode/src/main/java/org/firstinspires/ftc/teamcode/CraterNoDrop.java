@@ -78,26 +78,26 @@ public class CraterNoDrop extends LinearOpMode {
      //   telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
         //robot.EnableEncoders();
         robot.DriveByTime(2400);
-            while (robot.IsBusy2()) {
-                //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-            }
-            telemetry.addData("Done Moving","Complete");
+        while (robot.IsBusy2()) {
+            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+        }
+        telemetry.addData("Done Moving","Complete");
         sleep(100);
-            robot.DriveByLeftTime(1300);
+        robot.DriveByLeftTime(1300);
 
         while (robot.IsBusy2()) {
             telemetry.addData("Running", "Driving");
         }
         sleep(100);
-            robot.DriveByTime(1800);
+        robot.DriveByTime(1800);
         while (robot.IsBusy2()) {
             telemetry.addData("Running", "Driving");
         }
         sleep(100);
         telemetry.addData("Dropping Marker", "Driving");
-            robot.DropMarker();
+        robot.DropMarker();
         sleep(100);
-            robot.DriveByRightTime(2100);
+        robot.DriveByRightTime(2100);
 
 
 
