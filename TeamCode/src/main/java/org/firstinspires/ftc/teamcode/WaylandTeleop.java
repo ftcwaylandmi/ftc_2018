@@ -69,7 +69,9 @@ public class WaylandTeleop extends OpMode{
          */
 
         robot.initHW(hardwareMap);
-
+        double WinchPosition = 0;
+        double WinchMin = 0;
+        double WinchMax = 100;
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
     }
@@ -95,6 +97,7 @@ public class WaylandTeleop extends OpMode{
     public void loop() {
         double left;
         double right, arm;
+        double winchposition;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
@@ -103,26 +106,32 @@ public class WaylandTeleop extends OpMode{
         robot.rightDrive(right);
 
         // Use gamepad left & right Bumpers to open and close the claw
-        if (gamepad1.right_bumper)
+        if (gamepad2.right_bumper)
             robot.OpenPin();
-        else if (gamepad1.left_bumper)
+        else if (gamepad2.left_bumper)
             robot.ClosePin();
 
         // Use gamepad buttons to move the arm up (Y) and down (A)
         if (gamepad1.y)
             robot.ArmUp();
-        else if (gamepad1.a)
+        else if (gamepad2.a)
             robot.ArmDown();
         else
             robot.ArmStop();
-
+        if (gamepad2.b) {
+            robot.ArmOut();
+        }
+        if (gamepad1.x) {
+            robot.ArmIn();
+        }
         // Send telemetry message to signify robot running;
         telemetry.addData("left",  "%.2f", left);
         telemetry.addData("right", "%.2f", right);
         telemetry.addData("arm", "%d", robot.ArmLocation());
         telemetry.addData("arm_want", "%d", robot.ArmWants());
+     /* telemetry.addData("distance", "%.2f", robot.GetDistance());
+        telemetry.addData("RGB", "%d, %d, %d", robot.Red(), robot.Green(), robot.Blue());*/
     }
-
     /*
      * Code to run ONCE after the driver hits STOP
      */

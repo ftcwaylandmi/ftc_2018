@@ -29,12 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+import org.firstinspires.ftc.teamcode.WaylandHardware;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -56,7 +56,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 public class PushbotTeleopTank_Iterative extends OpMode{
 
     /* Declare OpMode members. */
-    HardwarePushbot robot       = new HardwarePushbot(); // use the class created to define a Pushbot's hardware
+    WaylandHardware robot       = new WaylandHardware(); // use the class created to define a Pushbot's hardware
                                                          // could also use HardwarePushbotMatrix class.
     double          clawOffset  = 0.0 ;                  // Servo mid position
     final double    CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
@@ -70,7 +70,6 @@ public class PushbotTeleopTank_Iterative extends OpMode{
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
     }
@@ -96,10 +95,11 @@ public class PushbotTeleopTank_Iterative extends OpMode{
     public void loop() {
         double left;
         double right, arm, arm2, arm1;
+        double winchpos;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = gamepad1.left_stick_y; //Took off the negative to give the people what they want
-        right = gamepad1.right_stick_y;
+        left = -gamepad1.left_stick_y;
+        right = -gamepad1.right_stick_y;
         //arm = gamepad2.left_stick_y;a
         //On Sunday, make forward to be forward and back to be back
          if (gamepad1.a) {
@@ -114,8 +114,33 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         arm2 = -gamepad2.right_stick_y;
 
         robot.leftArm.setPower(arm1);
-        robot.rightArm.setPower(arm2 * 0.6); //Up
-        //Changed at competition date 11/03/18 to lower power 50% to arm
+        // arm2 : -1 -> 1
+        // -.75 .455555 1
+        if (arm2 > 0) {
+            robot.rightArm.setPower(arm2 * 0.6); //Up
+
+        } else {
+            robot.rightArm.setPower(arm2 * 0.4);
+        }
+
+        if (gamepad2.b) {
+            double WinchPosition = .57;
+        /*    if (WinchPosition > WinchMax) {
+                WinchPosition = WinchMax;
+            } else if(WinchPosition < WinchMin) {
+                WinchPosition = WinchMin;
+            }*/
+            robot.winchservo.setPosition(WinchPosition);
+        } else if (gamepad2.x) {
+            double WinchPosition =  .2;
+
+            robot.winchservo.setPosition(WinchPosition);
+        } else {
+
+        }
+
+
+
 
         // Use gamepad left & right Bumpers to open and close the claw
         if (gamepad2.right_bumper)
@@ -126,7 +151,6 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         // Move both servos to new position.  Assume servos are mirror image of each other.
         clawOffset = Range.clip(clawOffset, -0.5, 0.5);
         robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
-        robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
 /*
         // Use gamepad buttons to move the arm up (Y) and down (A)
         if (gamepad2.a)//Switched to A instead of a because of the reversed motor
@@ -136,13 +160,14 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         else
             robot.leftArm.setPower(0.0);
 */
-
+        winchpos = robot.winchservo.getPosition();
         int motorEncoderVal = robot.leftArm.getCurrentPosition();
         // Send telemetry message to signify robot running;
         telemetry.addData("claw",  "Offset = %.2f", clawOffset);
         telemetry.addData("left",  "%.2f", left);
         telemetry.addData("right", "%.2f", right);
         telemetry.addData("arm", "%d", motorEncoderVal);
+        telemetry.addData("Winch", "%.2f", winchpos);
     }
 
     /*

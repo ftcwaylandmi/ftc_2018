@@ -47,9 +47,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="System Check", group="Linear Opmode")
+@TeleOp(name="ArmUp", group="Linear Opmode")
 
-public class SystemsCheck extends LinearOpMode {
+public class ResetRobot extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -71,28 +71,7 @@ public class SystemsCheck extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            robot.DropRobot();
-
             robot.ArmUp();
-            robot.ArmDown();
-            robot.OpenPin();
-            robot.ClosePin();
-            robot.leftDrive(1);
-            sleep(10);
-            robot.leftDrive(-1);
-            sleep(10);
-            robot.leftDrive(0);
-            robot.rightDrive(1);
-            sleep(10);
-            robot.rightDrive(-1);
-            sleep(10);
-            robot.rightDrive(0);
-
-            robot.wandArm(1);
-            sleep(10);
-            robot.wandArm(-1);
-            sleep(10);
-            robot.wandArm(0);
 
         }
     }

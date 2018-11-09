@@ -29,9 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Crater - Check", group="Linear Opmode")
+@Autonomous(name="Crater - Check", group="Linear Opmode")
 
 public class Crater_Check extends LinearOpMode {
 
@@ -67,16 +67,49 @@ public class Crater_Check extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        robot.initRobot();
+        robot.initHW(hardwareMap);
+        robot.initRobot(true);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
+        robot.EnableEncoders();
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+       // while (opModeIsActive()) {
             robot.DropRobot();
+            while (robot.IsBusy()) {
+                telemetry.addData("Running", "Drop Robot");
+            }
+            telemetry.addData("Finished", "Drop Robot");
+            telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
 
-            robot.DriveForwardWithEncoder(1232);
+            robot.DriveForwardWithEncoder(8000);
+            while (robot.IsBusy()) {
+                telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+                telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
+                telemetry.addData("Running", "Driving");
+            }
+            robot.DriveLeftWithEncoder(3000);
+
+        while (robot.IsBusy()) {
+            telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
+            telemetry.addData("Running", "Driving");
+        }
+            robot.DriveForwardWithEncoder(8000);
+        while (robot.IsBusy()) {
+            telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
+            telemetry.addData("Running", "Driving");
+        }
+            robot.DropMarker();
+            robot.DriveLeftWithEncoder(10000);
+
+            telemetry.addData("Left W/H", "%d, %d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            telemetry.addData("Right W/H", "%d, %d", robot.GetRightCurrent(), robot.GetRightTarget());
+
+
+            /*
             if (robot.DetectBall()) {
                 // run it over.
                 // go to collect point
@@ -90,6 +123,7 @@ public class Crater_Check extends LinearOpMode {
                     // go to collect point
                 }
             }
+            /*
             robot.DriveForwardWithEncoder(33);
             //turn left
             robot.DriveForwardWithEncoder(200);
@@ -97,6 +131,8 @@ public class Crater_Check extends LinearOpMode {
             // Turn around
             robot.DriveForwardWithEncoder(500);
             // Complete
-        }
+
+            */
+        //}
     }
 }

@@ -29,8 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -47,9 +50,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="System Check", group="Linear Opmode")
+@Autonomous(name="Crater NoDropDemo", group="Linear Opmode")
 
-public class SystemsCheck extends LinearOpMode {
+public class CraterNoDrop extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -64,36 +67,64 @@ public class SystemsCheck extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        robot.initRobot(false);
+        robot.initHW(hardwareMap);
+        robot.initRobot(true);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            robot.DropRobot();
+        //while (opModeIsActive()) {
+     //   telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+        //robot.EnableEncoders();
+        robot.DriveByTime(2400);
+            while (robot.IsBusy2()) {
+                //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            }
+            telemetry.addData("Done Moving","Complete");
+        sleep(100);
+            robot.DriveByLeftTime(1300);
 
-            robot.ArmUp();
-            robot.ArmDown();
-            robot.OpenPin();
-            robot.ClosePin();
-            robot.leftDrive(1);
-            sleep(10);
-            robot.leftDrive(-1);
-            sleep(10);
-            robot.leftDrive(0);
-            robot.rightDrive(1);
-            sleep(10);
-            robot.rightDrive(-1);
-            sleep(10);
-            robot.rightDrive(0);
-
-            robot.wandArm(1);
-            sleep(10);
-            robot.wandArm(-1);
-            sleep(10);
-            robot.wandArm(0);
-
+        while (robot.IsBusy2()) {
+            telemetry.addData("Running", "Driving");
         }
+        sleep(100);
+            robot.DriveByTime(1800);
+        while (robot.IsBusy2()) {
+            telemetry.addData("Running", "Driving");
+        }
+        sleep(100);
+        telemetry.addData("Dropping Marker", "Driving");
+            robot.DropMarker();
+        sleep(100);
+            robot.DriveByRightTime(2100);
+
+
+
+            /*
+            if (robot.DetectBall()) {
+                // run it over.
+                // go to collect point
+            } else {
+                // move to spot b
+                if (robot.DetectBall()) {
+                    // run it over
+                    // go to collect point
+                } else {
+                    // go to other ball and run it over
+                    // go to collect point
+                }
+            }
+            /*
+            robot.DriveForwardWithEncoder(33);
+            //turn left
+            robot.DriveForwardWithEncoder(200);
+            // Drop marker
+            // Turn around
+            robot.DriveForwardWithEncoder(500);
+            // Complete
+
+            */
+        //}
     }
 }
