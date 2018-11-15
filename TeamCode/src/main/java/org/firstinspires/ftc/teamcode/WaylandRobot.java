@@ -446,6 +446,13 @@ public class WaylandRobot {
         }
     }
 
+    public void ArmDownNoWait() {
+        myself.leftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        myself.leftArm.setTargetPosition(arm_offset);
+        myself.leftArm.setPower(-1);
+        myself.leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
     public void ArmStop(){
         myself.leftArm.setPower(0);
     }
