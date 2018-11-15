@@ -93,10 +93,22 @@ public class Crater_NoCheck_Enc extends LinearOpMode {
         }
 
 
-        robot.DriveByDistance(60, "left", 1 , opModeIsActive());
-        while (robot.IsBusy2()) {
+        robot.DriveByLeftTime(400);
+        robot.DriveByDistance(40, "forward", 1, opModeIsActive());
 
+        while (robot.IsBusy2()) {
+            telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            telemetry.update();
         }
+        robot.DriveByLeftTime(280);
+        robot.DriveByDistance(27, "forward", 1, opModeIsActive());
+
+        while (robot.IsBusy2()) {
+            telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            telemetry.update();
+        }
+        robot.DropMarker();
+
         telemetry.addData("Complete", "done");
         telemetry.update();
         /*
