@@ -170,6 +170,7 @@ public class WaylandRobot {
 
 
     public void DriveByLeftTime(int msval){
+        DisableEncoders();
         ElapsedTime timer =  new ElapsedTime();
         timer.reset();
         myself.rightDrive.setPower(-1);
@@ -208,6 +209,7 @@ public class WaylandRobot {
 
     public void DriveForwardWithEncoder(int encval){
         is_busy = true;
+        EnableEncoders();
         int leftoffset = myself.leftDrive.getCurrentPosition() + encval;
         int rightoffset = myself.rightDrive.getCurrentPosition() + encval;
         myself.leftDrive.setTargetPosition(leftoffset);

@@ -78,6 +78,7 @@ public class Crater_NoCheck_Enc extends LinearOpMode {
         // while (opModeIsActive()) {
         robot.DropRobot();
         robot.ArmDown();
+        robot.wandIn();
         while (robot.IsBusy()) {
             telemetry.addData("Running", "Drop Robot");
             telemetry.update();
