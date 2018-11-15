@@ -323,7 +323,7 @@ public class WaylandRobot {
                 leftencval -= encval;
                 rightencval -= encval;
             case "left":
-                //leftencval -= encval;
+                leftencval -= encval;
                 rightencval += encval;
             case "right":
                 leftencval += encval;
