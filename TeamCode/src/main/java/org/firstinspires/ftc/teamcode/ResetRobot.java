@@ -30,7 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -47,7 +47,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="ArmUp", group="Linear Opmode")
+@Autonomous(name="ArmUp", group="Linear Opmode")
 
 public class ResetRobot extends LinearOpMode {
 
@@ -64,15 +64,19 @@ public class ResetRobot extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        robot.initRobot(false);
+        robot.initHW(hardwareMap);
+        robot.initRobot(true);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        robot.EnableEncoders();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            robot.ArmUp();
+            robot.ArmSetVal(-robot.armdistance);
+            robot.wandIn();
 
         }
+
     }
 }

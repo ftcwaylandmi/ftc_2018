@@ -73,14 +73,43 @@ public class CraterNoDrop extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+
+        robot.DriveByDistance(20, "forward", .6, opModeIsActive());
+        while (robot.IsBusy2()){
+            telemetry.addData("Driving", "Left");
+            telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+
+            telemetry.update();
+        }
+        robot.DriveByLeftTime(600);
+        while (robot.IsBusy2()){
+            telemetry.addData("Driving", "Right");
+            telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+
+            telemetry.update();
+        }
+     //   robot.DriveByDistance(10, "forward", .6, opModeIsActive());
         // run until the end of the match (driver presses STOP)
-        //while (opModeIsActive()) {
+/*        while (opModeIsActive()) {
      //   telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
         //robot.EnableEncoders();
-        robot.DriveByTime(2400);
-        while (robot.IsBusy2()) {
-            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-        }
+
+        double distance = robot.GetDistance();
+        int red = robot.Red();
+        int green = robot.Green();
+        int blue = robot.Blue();
+        telemetry.addData("distance", "%f", distance);
+        telemetry.addData("red", "%d", red);
+        telemetry.addData("blue", "%d", blue);
+        telemetry.addData("green", "%d", green);
+
+        telemetry.update();
+        /*
+        robot.DropMarker();
+        robot.DriveByLeftTime(1280);
+        robot.DriveByTime(robot.cm_to_ms(250));
+*/
+        /*
         telemetry.addData("Done Moving","Complete");
         sleep(100);
         robot.DriveByLeftTime(1300);
@@ -125,6 +154,6 @@ public class CraterNoDrop extends LinearOpMode {
             // Complete
 
             */
-        //}
+       // }
     }
 }

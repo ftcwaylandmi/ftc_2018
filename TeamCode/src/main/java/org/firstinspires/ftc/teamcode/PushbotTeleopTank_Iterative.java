@@ -124,7 +124,7 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         }
 
         if (gamepad2.b) {
-            double WinchPosition = .57;
+            double WinchPosition = .60;
         /*    if (WinchPosition > WinchMax) {
                 WinchPosition = WinchMax;
             } else if(WinchPosition < WinchMin) {
@@ -132,7 +132,7 @@ public class PushbotTeleopTank_Iterative extends OpMode{
             }*/
             robot.winchservo.setPosition(WinchPosition);
         } else if (gamepad2.x) {
-            double WinchPosition =  .2;
+            double WinchPosition =  .25;
 
             robot.winchservo.setPosition(WinchPosition);
         } else {

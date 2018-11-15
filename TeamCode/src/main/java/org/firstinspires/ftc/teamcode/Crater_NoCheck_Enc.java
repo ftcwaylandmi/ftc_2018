@@ -30,11 +30,12 @@
 package org.firstinspires.ftc.teamcode;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import android.graphics.Path;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -50,9 +51,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Crater - Check", group="Linear Opmode")
+@Autonomous(name="Crater.NoCheck.Enc", group="Linear Opmode")
 
-public class Crater_Check extends LinearOpMode {
+public class Crater_NoCheck_Enc extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -74,34 +75,45 @@ public class Crater_Check extends LinearOpMode {
         runtime.reset();
         robot.EnableEncoders();
         // run until the end of the match (driver presses STOP)
-       // while (opModeIsActive()) {
-            robot.DropRobot();
-            while (robot.IsBusy()) {
-                telemetry.addData("Running", "Drop Robot");
-            }
-        robot.DriveByTime(1200);
-        while (robot.IsBusy2()) {
-            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-        }
+        // while (opModeIsActive()) {
+        robot.DropRobot();
         robot.ArmDown();
-        robot.DriveByLeftTime(980);
-        while (robot.IsBusy2()) {
-            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+        while (robot.IsBusy()) {
+            telemetry.addData("Running", "Drop Robot");
+            telemetry.update();
         }
-        // 118
-        robot.DriveByTime(2200);
-        while (robot.IsBusy2()) {
-            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-        }
-        robot.DriveByLeftTime(630);
-        while (robot.IsBusy2()) {
-            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-        }
-        robot.DriveByTime(2400);
-        robot.DropMarker();
-        robot.DriveByLeftTime(1280);
-        robot.DriveByTime2(robot.cm_to_ms(250));
 
+        //Drive away from Lander
+        robot.DriveByDistance(27, "forward", 1, opModeIsActive());
+
+        while (robot.IsBusy2()) {
+            telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            telemetry.update();
+        }
+
+
+        robot.DriveByLeftTime2(400);
+        while (robot.IsBusy2()) {
+            telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+            telemetry.update();
+        }
+        telemetry.addData("Complete", "done");
+        telemetry.update();
+        /*
+        // 118
+        robot.DriveForwardWithEncoder(1200);
+        while (robot.IsBusy2()) {
+            telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+        }
+        robot.DriveLeftWithEncoder(400);
+        while (robot.IsBusy2()) {
+            telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
+        }
+        robot.DriveLeftWithEncoder(1800);
+        robot.DropMarker();
+        robot.DriveLeftWithEncoder(680);
+        //robot.DriveLeftWithEncoder(robot.cm_to_ms(250));
+        */
         //}
     }
 }

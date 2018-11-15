@@ -30,11 +30,10 @@
 package org.firstinspires.ftc.teamcode;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -50,9 +49,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Crater - Check", group="Linear Opmode")
+@Autonomous(name="Drop only", group="Linear Opmode")
 
-public class Crater_Check extends LinearOpMode {
+public class drop_only extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -75,32 +74,17 @@ public class Crater_Check extends LinearOpMode {
         robot.EnableEncoders();
         // run until the end of the match (driver presses STOP)
        // while (opModeIsActive()) {
-            robot.DropRobot();
-            while (robot.IsBusy()) {
-                telemetry.addData("Running", "Drop Robot");
-            }
+        robot.DropRobot();
+        while (robot.IsBusy()) {
+            telemetry.addData("Running", "Drop Robot");
+        }
         robot.DriveByTime(1200);
         while (robot.IsBusy2()) {
             //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
         }
+        robot.wandOut();
         robot.ArmDown();
-        robot.DriveByLeftTime(980);
-        while (robot.IsBusy2()) {
-            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-        }
-        // 118
-        robot.DriveByTime(2200);
-        while (robot.IsBusy2()) {
-            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-        }
-        robot.DriveByLeftTime(630);
-        while (robot.IsBusy2()) {
-            //telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
-        }
-        robot.DriveByTime(2400);
-        robot.DropMarker();
-        robot.DriveByLeftTime(1280);
-        robot.DriveByTime2(robot.cm_to_ms(250));
+
 
         //}
     }

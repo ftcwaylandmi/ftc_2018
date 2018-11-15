@@ -18,22 +18,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class WaylandRobot {
 
+    // START OF GLOBAL DECLARATIONS
     int leftmotor_offset = 0;
     int rightmotor_offset = 0;
 
     double servo_offset = 0;
     double motor_power = 1;
     double drop_power = 1;
-
+    double cm_per_ms = 0.039;
     int goldSoundID;
 
-    double WinchMin = .1;
-    double WinchMax = .55;
+    double WinchMin = .25;
+    double WinchMax = .60;
     double WinchPosition = 0;
     double dropPinOut = .50;
     double dropPinIn = -.44;
 
-    /*
+
     ColorSensor sensorColor;
     DistanceSensor sensorDistance;
     float hsvValues[] = {0F, 0F, 0F};
@@ -41,7 +42,6 @@ public class WaylandRobot {
     final double SCALE_FACTOR = 255;
     int relativeLayoutId;
     View relativeLayout;
-    */
 
     boolean is_busy = false;
 
@@ -55,6 +55,9 @@ public class WaylandRobot {
     int armdistance = -4153;
     WaylandHardware myself = new WaylandHardware();
     private boolean goldFound;
+
+
+    // END OF DECLARATIONS
 
     public void initLeftmotor_offset() {
         leftmotor_offset = myself.leftDrive.getCurrentPosition();
@@ -81,7 +84,7 @@ public class WaylandRobot {
     }
 
     public void initArm_offset() { arm_offset = myself.leftArm.getCurrentPosition();}
-/*
+
     public void initColorDistance() {
         // get a reference to the color sensor.
         sensorColor = myself.hwMap.get(ColorSensor.class, "sensor_color_distance");
@@ -95,7 +98,7 @@ public class WaylandRobot {
         relativeLayout = ((Activity) myself.hwMap.appContext).findViewById(relativeLayoutId);
 
     }
-    */
+
     public void initRobot(boolean enableEncoders) {
         if (enableEncoders) {
             EnableEncoders();
@@ -104,7 +107,7 @@ public class WaylandRobot {
         }
         initArm_offset();
         initServo_offset();
-        //initColorDistance();
+        initColorDistance();
     }
     public int GetLeftTarget() {
         return myself.leftDrive.getTargetPosition();
@@ -122,10 +125,29 @@ public class WaylandRobot {
         return myself.leftDrive.getCurrentPosition();
     }
 
+    public int cm_to_ms (int cms) {
+
+        int msec = (int)(cms/cm_per_ms);
+
+        return msec;
+    }
+
     public void DriveByTime(int msval){
         ElapsedTime timer =  new ElapsedTime();
         timer.reset();
         myself.rightDrive.setPower(1);
+        myself.leftDrive.setPower(1);
+        while (timer.milliseconds() < msval) {
+
+        }
+        myself.rightDrive.setPower(0);
+        myself.leftDrive.setPower(0);
+    }
+
+    public void DriveByTime2(int msval){
+        ElapsedTime timer =  new ElapsedTime();
+        timer.reset();
+        myself.rightDrive.setPower(.9);
         myself.leftDrive.setPower(1);
         while (timer.milliseconds() < msval) {
 
@@ -150,8 +172,20 @@ public class WaylandRobot {
     public void DriveByLeftTime(int msval){
         ElapsedTime timer =  new ElapsedTime();
         timer.reset();
-        myself.rightDrive.setPower(1);
-        myself.leftDrive.setPower(-1);
+        myself.rightDrive.setPower(-1);
+        myself.leftDrive.setPower(1);
+        while (timer.milliseconds() < msval) {
+
+        }
+        myself.rightDrive.setPower(0);
+        myself.leftDrive.setPower(0);
+    }
+
+    public void DriveByLeftTime2(int msval){
+        ElapsedTime timer =  new ElapsedTime();
+        timer.reset();
+        myself.rightDrive.setPower(-.9);
+        myself.leftDrive.setPower(1);
         while (timer.milliseconds() < msval) {
 
         }
@@ -180,6 +214,9 @@ public class WaylandRobot {
         myself.rightDrive.setTargetPosition(rightoffset);
         myself.rightDrive.setPower(motor_power);
         myself.leftDrive.setPower(motor_power);
+        myself.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        myself.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         leftmotor_offset = leftoffset;
         rightmotor_offset = rightoffset;
@@ -195,6 +232,10 @@ public class WaylandRobot {
         myself.rightDrive.setTargetPosition(rightoffset);
         myself.rightDrive.setPower(motor_power);
         myself.leftDrive.setPower(motor_power);
+        myself.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        myself.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
         leftmotor_offset = leftoffset;
         rightmotor_offset = rightoffset;
         is_busy = false;
@@ -205,13 +246,95 @@ public class WaylandRobot {
 
         int leftoffset = myself.leftDrive.getCurrentPosition() + encval;
         int rightoffset = myself.rightDrive.getCurrentPosition() - encval;
+
         myself.leftDrive.setTargetPosition(leftoffset);
         myself.rightDrive.setTargetPosition(rightoffset);
         myself.rightDrive.setPower(motor_power);
         myself.leftDrive.setPower(motor_power);
+        myself.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        myself.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         leftmotor_offset = leftoffset;
         rightmotor_offset = rightoffset;
+    }
+
+    public void DriveForwardWithEncoder2(int encval){
+        is_busy = true;
+        int leftoffset = myself.leftDrive.getCurrentPosition() + encval;
+        int rightoffset = myself.rightDrive.getCurrentPosition() + encval;
+        DriveWithEncoder(leftoffset, rightoffset, motor_power);
+        leftmotor_offset = leftoffset;
+        rightmotor_offset = rightoffset;
+        is_busy = false;
+    }
+
+    public void DriveLeftWithEncoder2(int encval){
+        is_busy = true;
+        int leftoffset = myself.leftDrive.getCurrentPosition() - encval;
+        int rightoffset = myself.rightDrive.getCurrentPosition() + encval;
+
+        DriveWithEncoder(leftoffset, rightoffset, motor_power);
+
+        leftmotor_offset = leftoffset;
+        rightmotor_offset = rightoffset;
+        is_busy = false;
+
+    }
+
+
+
+    public void DriveRightWithEncoder2(int encval){
+        is_busy = true;
+        int leftoffset = myself.leftDrive.getCurrentPosition() + encval;
+        int rightoffset = myself.rightDrive.getCurrentPosition() - encval;
+        DriveWithEncoder(leftoffset, rightoffset, motor_power);
+        leftmotor_offset = leftoffset;
+        rightmotor_offset = rightoffset;
+        is_busy = false;
+    }
+
+    private void DriveWithEncoder(int left, int right, double power) {
+        is_busy = true;
+        myself.leftDrive.setTargetPosition(left);
+        myself.rightDrive.setTargetPosition(right);
+        myself.rightDrive.setPower(power);
+        myself.leftDrive.setPower(power);
+        if(right != myself.rightDrive.getCurrentPosition()) {
+            myself.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+        if(left != myself.leftDrive.getCurrentPosition()) {
+            myself.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+        is_busy = false;
+    }
+
+    public void DriveByDistance(int cms, String direction, double power, boolean active) {
+        int encval = (int)(COUNTS_PER_CM * cms);
+        int leftencval = myself.leftDrive.getCurrentPosition();
+        int rightencval = myself.rightDrive.getCurrentPosition();
+
+        switch (direction) {
+            case "forward":
+                leftencval += encval;
+                rightencval += encval;
+            case "reverse":
+                leftencval -= encval;
+                rightencval -= encval;
+            case "left":
+                //leftencval -= encval;
+                rightencval += encval;
+            case "right":
+                leftencval += encval;
+                //rightencval -= encval;
+            default:
+                leftencval += encval;
+                rightencval += encval;
+
+        }
+
+        if (active) {
+            DriveWithEncoder(leftencval, rightencval, power);
+        }
     }
 
     public void DropMarker() {
@@ -300,6 +423,17 @@ public class WaylandRobot {
         }
     }
 
+    public void ArmSetVal(int distance) {
+        myself.leftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        myself.leftArm.setTargetPosition(arm_offset + distance);
+        myself.leftArm.setPower(1);
+        myself.leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while(myself.leftArm.isBusy()) {
+
+        }
+    }
+
+
     public void ArmDown() {
         myself.leftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myself.leftArm.setTargetPosition(arm_offset);
@@ -333,12 +467,20 @@ public class WaylandRobot {
 
     public void wandArm(double power) { myself.rightArm.setPower(power);}
 
+    public void wandOut() {
+        myself.winchservo.setPosition(WinchMax);
+    }
+
+    public void wandIn(){
+        myself.winchservo.setPosition(WinchMin);
+    }
     public void stop() {
         myself.leftArm.setPower(0);
         myself.rightDrive.setPower(0);
         myself.leftDrive.setPower(0);
     }
-/*
+
+
     public boolean DetectBall() {
 
 
@@ -366,114 +508,7 @@ public class WaylandRobot {
 
     public double GetDistance() {
        return sensorDistance.getDistance(DistanceUnit.CM);
-    }*/
-/*
-    public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
-            // Determine new target position, and pass to motor controller
-            newLeftTarget = myself.leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = myself.rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            robot.leftDrive.setTargetPosition(newLeftTarget);
-            robot.rightDrive.setTargetPosition(newRightTarget);
-
-            // Turn On RUN_TO_POSITION
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // reset the timeout time and start motion.
-            runtime.reset();
-            robot.leftDrive.setPower(Math.abs(speed));
-            robot.rightDrive.setPower(Math.abs(speed));
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
-
-                // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
-                        robot.leftDrive.getCurrentPosition(),
-                        robot.rightDrive.getCurrentPosition());
-                telemetry.update();
-            }
-
-            // Stop all motion;
-            robot.leftDrive.setPower(0);
-            robot.rightDrive.setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //  sleep(250);   // optional pause after each move
-        }*/
-
-
-
-    public void encoderDriveByCM(double speed,
-                             double distance,
-                             double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
-
-        // Ensure that the opmode is still active
-        if (true) {
-
-            // Determine new target position, and pass to motor controller
-            newLeftTarget = myself.leftDrive.getCurrentPosition() + (int) (distance * COUNTS_PER_CM);
-            newRightTarget = myself.rightDrive.getCurrentPosition() + (int) (distance * COUNTS_PER_CM);
-            myself.leftDrive.setTargetPosition(newLeftTarget);
-            myself.rightDrive.setTargetPosition(newRightTarget);
-
-            // Turn On RUN_TO_POSITION
-            myself.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            myself.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // reset the timeout time and start motion.
-            //runtime.reset();
-            myself.leftDrive.setPower(Math.abs(speed));
-            myself.rightDrive.setPower(Math.abs(speed));
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (true &&
-                    (myself.leftDrive.isBusy() && myself.rightDrive.isBusy())) {
-
-                // Display it for the driver.
-                //telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                //telemetry.addData("Path2",  "Running at %7d :%7d",
-                myself.leftDrive.getCurrentPosition();
-                myself.rightDrive.getCurrentPosition();
-                //telemetry.update();
-            }
-
-            // Stop all motion;
-            myself.leftDrive.setPower(0);
-            myself.rightDrive.setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            myself.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            myself.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //  sleep(250);   // optional pause after each move
-        }
     }
-        /*
-        public boolean opModeIsActive(){
-            return true;
-        }*/
+
 }
 
