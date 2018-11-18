@@ -102,14 +102,9 @@ public class PushbotTeleopTank_Iterative extends OpMode{
         right = -gamepad1.right_stick_y;
         //arm = gamepad2.left_stick_y;a
         //On Sunday, make forward to be forward and back to be back
-         if (gamepad1.a) {
             robot.leftDrive.setPower(left);
             robot.rightDrive.setPower(right);
             //Else statement did belong here at one point, else can be added 11/03/18
-        } else {
-             robot.leftDrive.setPower(left * power_percent);
-             robot.rightDrive.setPower(right * power_percent);
-         }
         arm1 = -gamepad2.left_stick_y;
         arm2 = -gamepad2.right_stick_y;
 
