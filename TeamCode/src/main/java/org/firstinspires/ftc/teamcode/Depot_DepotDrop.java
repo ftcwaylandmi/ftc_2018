@@ -83,13 +83,13 @@ public class Depot_DepotDrop extends LinearOpMode {
         }
 
         //Drive away from Lander
-        robot.DriveByDistance(70, "forward", 1, opModeIsActive());
+        robot.DriveByDistance(40, "forward", 1, opModeIsActive());
 
         while (robot.IsBusy2()) {
             telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
             telemetry.update();
         }
-
+        robot.DriveByLeftTime(140);
         robot.DropMarker();
 
         telemetry.addData("Complete", "done");

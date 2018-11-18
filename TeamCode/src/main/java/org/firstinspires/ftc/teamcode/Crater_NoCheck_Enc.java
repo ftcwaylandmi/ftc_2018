@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Path;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -52,9 +53,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Crater.NoCheck.Enc", group="Linear Opmode")
+@Disabled
 
 public class Crater_NoCheck_Enc extends LinearOpMode {
-
+    // No longer in use
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 

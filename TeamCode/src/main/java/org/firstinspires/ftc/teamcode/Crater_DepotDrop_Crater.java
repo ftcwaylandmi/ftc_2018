@@ -107,7 +107,7 @@ public class Crater_DepotDrop_Crater extends LinearOpMode {
         }
         robot.DropMarker();
         sleep(10);
-        robot.DriveByLeftTime(800);
+        robot.DriveByLeftTime(1000);
         robot.DriveByDistance(80, "forward", 1, opModeIsActive());
 
         while (robot.IsBusy2()) {

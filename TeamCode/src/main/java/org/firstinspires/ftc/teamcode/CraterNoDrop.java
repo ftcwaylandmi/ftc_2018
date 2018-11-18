@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Crater NoDropDemo", group="Linear Opmode")
+@Autonomous(name="ZZZ.Crater.NoDrop", group="Linear Opmode")
 
 public class CraterNoDrop extends LinearOpMode {
 
