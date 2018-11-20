@@ -83,7 +83,7 @@ public class Depot_DepotDrop_Crater extends LinearOpMode {
         }
 
         //Drive away from Lander
-        robot.DriveByDistance(40, "forward", 1, opModeIsActive());
+        robot.DriveByDistance(44, "forward", 1, opModeIsActive());
 
         while (robot.IsBusy2()) {
             telemetry.addData("Moving", "%d%d", robot.GetLeftCurrent(), robot.GetLeftTarget());
